@@ -1,38 +1,58 @@
-.App {
-  text-align: center;
+.table-auto {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Добавлено для фиксированной ширины колонок */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.table-auto th, .table-auto td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  overflow: hidden; /* Добавлено для предотвращения переполнения */
+  text-overflow: ellipsis; /* Добавлено для обрезки текста с многоточием */
+  white-space: nowrap; /* Добавлено для предотвращения переноса текста */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.table-auto th {
+  background-color: #f2f2f2;
+  text-align: left;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.table-auto tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table-auto tr:hover {
+  background-color: #ddd;
+}
+
+.table-auto th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #4CAF50;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Добавлено для фиксированной ширины колонок */
+.table-auto th:nth-child(1), .table-auto td:nth-child(1) {
+  width: 50%; /* Ширина для колонки Название */
+}
+
+.table-auto th:nth-child(2), .table-auto td:nth-child(2) {
+  width: 10%; /* Ширина для колонки Рейтинг */
+}
+
+.table-auto th:nth-child(3), .table-auto td:nth-child(3) {
+  width: 30%; /* Ширина для колонки Дата выхода */
+}
+
+.table-auto th:nth-child(4), .table-auto td:nth-child(4) {
+  width: 10%; /* Ширина для колонки Тип */
 }
