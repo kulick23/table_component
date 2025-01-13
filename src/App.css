@@ -1,3 +1,7 @@
+
+.container{
+  margin-top: 20px;
+}
 .table-auto {
   width: 100%;
   border-collapse: collapse;
@@ -55,4 +59,33 @@ button:disabled {
 
 .table-auto th:nth-child(4), .table-auto td:nth-child(4) {
   width: 10%; /* Ширина для колонки Тип */
+}
+button {
+  border-radius: 0px;
+  color: white;
+  transition: .2s linear;
+  background: #4CAF50;
+  border: none;
+  padding: 9px;
+}
+
+button:hover {
+  box-shadow:0px -6px 0 #5fca62 inset;
+}
+.buttons{
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+input,select{
+  padding: 5px;
+}
+.container__inputs{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px ;
 }

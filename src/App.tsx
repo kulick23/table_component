@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import './App.css'; 
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
   const [data, setData] = useState<any[]>([]);
@@ -11,7 +11,9 @@ function App() {
   const [minScore, setMinScore] = useState(() => localStorage.getItem("minScore") || "");
   const [maxScore, setMaxScore] = useState(() => localStorage.getItem("maxScore") || "");
   const [sortField, setSortField] = useState<string>(() => localStorage.getItem("sortField") || "title");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(() => (localStorage.getItem("sortOrder") as "asc" | "desc") || "asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(
+    () => (localStorage.getItem("sortOrder") as "asc" | "desc") || "asc"
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [selectedType, setSelectedType] = useState<string>(() => localStorage.getItem("selectedType") || "");
@@ -20,9 +22,7 @@ function App() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `https://api.jikan.moe/v4/anime?page=${page}&limit=10`
-        );
+        const response = await fetch(`https://api.jikan.moe/v4/anime?page=${page}&limit=10`);
         const json = await response.json();
         if (json.data) {
           console.log("Data fetched for page", page, json.data);
@@ -85,6 +85,16 @@ function App() {
     }
   };
 
+  const handleReset = () => {
+    setSearchText("");
+    setMinScore("");
+    setMaxScore("");
+    setSelectedType("");
+    setSortField("title");
+    setSortOrder("asc");
+    setPage(1);
+  };
+
   const filteredData = data.filter((item) => {
     const matchTitle = item.title.toLowerCase().includes(searchText.toLowerCase());
     const score = item.score || 0;
@@ -96,7 +106,7 @@ function App() {
 
   filteredData.sort((a, b) => {
     let valA, valB;
-    if (sortField === 'aired') {
+    if (sortField === "aired") {
       valA = new Date(a[sortField]?.from).getTime() || 0;
       valB = new Date(b[sortField]?.from).getTime() || 0;
     } else {
@@ -109,41 +119,35 @@ function App() {
   });
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex gap-4">
+    <div className="container">
+      <div className="container__inputs">
         <input
-          className="border p-1"
           type="text"
           placeholder="Поиск по названию"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
         <input
-          className="border p-1"
           type="number"
           placeholder="Мин. оценка"
           value={minScore}
           onChange={handleMinScoreChange}
         />
         <input
-          className="border p-1"
           type="number"
           placeholder="Макс. оценка"
           value={maxScore}
           onChange={handleMaxScoreChange}
         />
         <select
-          className="border p-1"
           value={sortField}
           onChange={(e) => handleSort(e.target.value)}
         >
           <option value="title">Название</option>
           <option value="score">Рейтинг</option>
-          <option value="aired">Дата выхода</option>
-          <option value="type">Тип</option>
+          <option value="aired">Дата</option>
         </select>
         <select
-          className="border p-1"
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
         >
@@ -152,32 +156,32 @@ function App() {
           <option value="Movie">Movie</option>
           <option value="OVA">OVA</option>
           <option value="Special">Special</option>
-          <option value="ONA">ONA</option>
-          <option value="Music">Music</option>
         </select>
       </div>
 
       {loading ? (
         <div className="text-center">Загрузка...</div>
       ) : (
-        <div className="overflow-x-auto">
+        <div >
           {data.length > 0 ? (
-            <table className="table-auto w-full border-collapse border">
+            <table className="table-auto">
               <thead>
                 <tr>
-                  <th className="border px-4 py-2 cursor-pointer bg-gray-200" onClick={() => handleSort('title')}>Название</th>
-                  <th className="border px-4 py-2 cursor-pointer bg-gray-200" onClick={() => handleSort('score')}>Рейтинг</th>
-                  <th className="border px-4 py-2 cursor-pointer bg-gray-200" onClick={() => handleSort('aired')}>Дата выхода</th>
-                  <th className="border px-4 py-2 cursor-pointer bg-gray-200" onClick={() => handleSort('type')}>Тип</th>
+                  <th>Название</th>
+                  <th>Рейтинг</th>
+                  <th>Дата</th>
+                  <th>Тип</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredData.map((item) => (
                   <tr key={item.mal_id}>
-                    <td className="border px-4 py-2">{item.title || "данные отсутствуют"}</td>
-                    <td className="border px-4 py-2">{item.score !== undefined ? item.score : "данные отсутствуют"}</td>
-                    <td className="border px-4 py-2">{item.aired?.string || "данные отсутствуют"}</td>
-                    <td className="border px-4 py-2">{item.type || "данные отсутствуют"}</td>
+                    <td >{item.title || "данные отсутствуют"}</td>
+                    <td >
+                      {item.score !== undefined ? item.score : "данные отсутствуют"}
+                    </td>
+                    <td>{item.aired?.string || "данные отсутствуют"}</td>
+                    <td>{item.type || "данные отсутствуют"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -188,21 +192,24 @@ function App() {
         </div>
       )}
 
-      <div className="mt-4 flex gap-2">
+      <div className="buttons">
         <button
           disabled={page <= 1}
-          className="border px-2 py-1 bg-blue-500 text-white disabled:bg-gray-300"
           onClick={() => setPage((prev) => Math.max(1, prev - 1))}
         >
-          Назад
+          ᐊ
         </button>
         <span>Страница: {page} из {totalPages}</span>
         <button
           disabled={page >= totalPages}
-          className="border px-2 py-1 bg-blue-500 text-white"
           onClick={() => setPage((prev) => prev + 1)}
         >
-          Вперёд
+          ᐅ
+        </button>
+        <button
+          onClick={handleReset}
+        >
+          Сброс
         </button>
       </div>
     </div>
